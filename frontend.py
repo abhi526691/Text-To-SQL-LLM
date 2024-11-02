@@ -14,8 +14,8 @@ class View():
     def button(self, message):
         return st.button(message)
 
-    def text_area(self, message=""):
-        return st.text_area(message)
+    def text_area(self, label, message):
+        return st.text_area(label=label, value=message)
 
     def write(self, message):
         return st.write(message)
