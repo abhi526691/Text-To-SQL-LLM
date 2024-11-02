@@ -29,7 +29,7 @@ class FileFormat(View):
 
     def extensionDb(self, file_path):
         return sqlite3.connect(file_path)
-    
+
     def fetchTable(self, conn):
         # Retrieve and display table names
         cursor = conn.cursor()
@@ -38,11 +38,11 @@ class FileFormat(View):
 
         tables = cursor.fetchall()
         return tables
-    
+
     def return_first_5_row(self, table_name, conn):
         return pd.read_sql_query(
-                    f"SELECT * FROM {table_name[0]} LIMIT 5;", conn)
-    
+            f"SELECT * FROM {table_name[0]} LIMIT 5;", conn)
+
     def execute_query(self, query, conn=""):
         try:
             # Step 4: Execute and display the query result
@@ -50,3 +50,15 @@ class FileFormat(View):
             self.write(result)
         except Exception as e:
             self.error(f"Error executing query: {e}")
+
+    def define_schema(self, tables, conn):
+        schema = {}
+        cursor = conn.cursor()
+        for table in tables:
+            table_name = table[0]
+            cursor.execute(f"PRAGMA table_info({table_name});")
+            columns = cursor.fetchall()
+            schema[table_name] = [
+                {"name": col[1], "type": col[2]} for col in columns]
+
+        return schema
