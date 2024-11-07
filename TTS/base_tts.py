@@ -1,9 +1,31 @@
 import streamlit as st
+import re
 
 
 class View:
     def __init__(self):
         pass
+
+    def process_text(self, data):
+        pattern = r"'(.*?)'"
+        return [re.search(pattern, str(item)).group(1) for item in data if re.search(pattern, str(item))]
+
+    def extract_sql_query(self, sql):
+        # Step 1: Remove block comments (/* ... */)
+        sql = re.sub(r"/\*.*?\*/", "", sql, flags=re.DOTALL)
+
+        # Step 2: Remove single-line comments (-- ...)
+        sql = re.sub(r"--.*", "", sql)
+
+        # Step 4: Remove excessive whitespace and newlines
+        sql = re.sub(r"\s+", " ", sql).strip()
+
+        sql = sql.replace("sql", "")
+        sql = sql.replace("`", "")
+        return sql
+
+    def tabs(self, tab_list):
+        return st.tabs(tab_list)
 
     def title(self, message):
         return st.title(message)
@@ -35,6 +57,19 @@ class View:
     def table(self, data):
         # Display the DataFrame as a table without row index
         return st.dataframe(data=data, hide_index=True)
+
+    def select_box(self, data):
+        # Create a dropdown (selectbox) for selecting the table
+        return st.selectbox("Select a table to display:", data)
+
+    def expander(self, text):
+        return st.expander(text)
+
+    def subheader(self, text):
+        return st.subheader(text)
+
+    def columns(self, col):
+        return st.columns(col)
 
     def prompt(self, nlp_input, schema_context):
         return f"""

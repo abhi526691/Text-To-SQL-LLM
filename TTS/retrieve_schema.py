@@ -1,4 +1,7 @@
 import tempfile
+import math
+import plotly.graph_objects as go
+
 from .base_tts import View
 from .db_management import Database
 
@@ -31,7 +34,10 @@ class schemaRetrieve(View):
 
                 # Display table names
                 View().header("Available Tables")
-                Database().display_table_data(tables=tables, conn=self.conn)
+                preprocessed_table = View().process_text(tables)
+                for table in preprocessed_table:
+                    with View().expander(table):
+                        Database().return_first_5_row(table, self.conn)
 
                 return schema
 
@@ -46,3 +52,23 @@ class schemaRetrieve(View):
                 column["name"]: column["type"] for column in columns}
 
         return transformed_schema
+
+
+    def display_schema_diagram(self, schema):
+
+        # Define the number of columns to display the schema side by side
+        cols = View().columns(3)  # You can change this number depending on how many columns you want
+
+        # For each column, display the table schema
+        col_index = 0
+        for table_name, columns in schema.items():
+            with cols[col_index]:
+                View().subheader(f"Table: {table_name}")
+                for column_name, column_type in columns.items():
+                    View().write(f"{column_name}: {column_type}")
+            
+            # Move to the next column after each table
+            col_index += 1
+            if col_index >= len(cols):
+                col_index = 0  # Reset to the first column if there are more tables than columns
+        

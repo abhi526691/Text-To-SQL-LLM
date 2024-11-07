@@ -7,30 +7,78 @@ from TTS.db_management import Database
 
 def main():
     View().title("Text(NLP) to SQL LLM")
-    db_file = View().file_uploader(
-        "Upload file", type=["sqlite", "db", "sql"])
-    schema_retrieve = schemaRetrieve(db_file=db_file)
-    schema = schema_retrieve.db_to_schema()
-    if schema:
-        schema_context = schema_retrieve.transform_schema(schema=schema)
-        View().header("SQL Query Tester")
-        nlp_input = View().text_area("Write your SQL query here:", "")
+    Home, Tables, Schema, QueryEditor = View().tabs(
+        ["Home", "Tables List", "Schema Diagram", "Query Editor"])
 
-        if View().button("SQL Query Tester"):
-            sql_query = GenerateQuery().generate_sql_query_with_gemini(
-                nlp_input, schema_context)
-            View().write(sql_query)
+    with Home:
+        db_file = View().file_uploader(
+            "Upload file", type=["sqlite", "db", "sql"])
 
-            sql_query = sql_query.replace('`', '')
-            sql_query = sql_query.replace('sql', '')
-
-            if schema_retrieve.extension == 'sql':
-                Database().execute_sql_query(sql_query, schema_retrieve.conn)
+        with Tables:
+            if db_file:
+                schema_retrieve = schemaRetrieve(db_file=db_file)
+                schema = schema_retrieve.db_to_schema()
+                if schema:
+                    schema_context = schema_retrieve.transform_schema(
+                        schema=schema)
             else:
-                Database().execute_db_query(sql_query, schema_retrieve.conn)
+                View().title("Please Upload the sql file to view the tables")
+
+        with Schema:
+            try:
+                schema_retrieve.display_schema_diagram(
+                    schema_context)
+            except Exception as e:
+                View().title("Please Upload the sql file to view the schema diagram")
+
+        with QueryEditor:
+            View().header("SQL Query Tester")
+            nlp_input = View().text_area("Write your NLP Input here:", "")
+
+            if View().button("SQL Query Tester"):
+                if schema_context:
+                    sql_query = GenerateQuery().generate_sql_query_with_gemini(
+                        nlp_input, schema_context)
+                    View().write(sql_query)
+
+                    sql_query = View().extract_sql_query(sql_query)
+                    print("SQL QUERY", sql_query)
+
+                    if schema_retrieve.extension == 'sql':
+                        Database().execute_sql_query(sql_query, schema_retrieve.conn)
+                    else:
+                        Database().execute_db_query(sql_query, schema_retrieve.conn)
+                else:
+                    View().error("Please Upload the Database file")
 
 
 main()
+
+#     db_file = View().file_uploader(
+#         "Upload file", type=["sqlite", "db", "sql"])
+#     schema_retrieve = schemaRetrieve(db_file=db_file)
+#     schema = schema_retrieve.db_to_schema()
+#     if schema:
+#         schema_context = schema_retrieve.transform_schema(schema=schema)
+#         print("Schema Context:", schema_context)
+#         View().header("SQL Query Tester")
+#         nlp_input = View().text_area("Write your SQL query here:", "")
+
+#         if View().button("SQL Query Tester"):
+#             sql_query = GenerateQuery().generate_sql_query_with_gemini(
+#                 nlp_input, schema_context)
+#             View().write(sql_query)
+
+#             sql_query = View().extract_sql_query(sql_query)
+#             print("SQL QUERY", sql_query)
+
+#             if schema_retrieve.extension == 'sql':
+#                 Database().execute_sql_query(sql_query, schema_retrieve.conn)
+#             else:
+#                 Database().execute_db_query(sql_query, schema_retrieve.conn)
+
+
+# main()
 
 
 # # Main Flow

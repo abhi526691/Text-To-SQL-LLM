@@ -38,11 +38,13 @@ class Database(View):
         cursor.execute(
             "SELECT name FROM sqlite_master WHERE type='table';")
         tables = cursor.fetchall()
+
         return tables
 
     def return_first_5_row(self, table_name, conn):
-        return pd.read_sql_query(
-            f"SELECT * FROM {table_name[0]} LIMIT 5;", conn)
+        data = pd.read_sql_query(
+            f"SELECT * FROM {table_name} LIMIT 5", conn)
+        View().write(data)
 
     def execute_db_query(self, query, conn):
         try:
