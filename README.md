@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/89f436d0-9d92-4b44-bda4-16cbcabc74dc
 1. Clone the repository:
 
    ```bash
-   [git clone https://github.com/your-repo-url/text-to-sql-gemini.git](https://github.com/abhi526691/Text-To-SQL-LLM)
+   git clone https://github.com/abhi526691/ATS-Resume-
    cd Text-To-SQL-LLM
    ```
 
