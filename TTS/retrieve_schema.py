@@ -1,5 +1,6 @@
 import tempfile
 import math
+import plotly.graph_objects as go
 
 from .base_tts import View
 from .db_management import Database
