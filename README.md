@@ -2,13 +2,17 @@
 
 This project is a Text-to-SQL application that leverages Google’s Gemini LLM to transform natural language input into SQL queries. The application reads a database schema, processes user inputs, and generates SQL queries to retrieve data based on those inputs. It is built with Python and Streamlit, making it suitable for both database management and natural language processing tasks.
 
+
+
+https://github.com/user-attachments/assets/89f436d0-9d92-4b44-bda4-16cbcabc74dc
+
+
 ## Table of Contents
 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Modules](#modules)
-- [Environment Variables](#environment-variables)
 - [Example Usage](#example-usage)
 - [Acknowledgements](#acknowledgements)
 
@@ -26,8 +30,8 @@ This project is a Text-to-SQL application that leverages Google’s Gemini LLM t
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-repo-url/text-to-sql-gemini.git
-   cd text-to-sql-gemini
+   [git clone https://github.com/your-repo-url/text-to-sql-gemini.git](https://github.com/abhi526691/Text-To-SQL-LLM)
+   cd Text-To-SQL-LLM
    ```
 
 2. Install the required packages:
@@ -36,7 +40,8 @@ This project is a Text-to-SQL application that leverages Google’s Gemini LLM t
    pip install -r requirements.txt
    ```
 
-3. Set up the environment variables by creating a `.env` file and adding your Google Gemini API key:
+3. Set up the environment variables by creating a `.env` file and adding your Google Gemini API key:<br>
+   Get Your API KEY from [Gemini](https://ai.google.dev/gemini-api/docs/api-key)
 
    ```
    GOOGLE_API_KEY=your_google_api_key
@@ -79,14 +84,6 @@ Responsible for retrieving and transforming the schema, including visual represe
 ### `TTS/text_to_sql_gemini.py`
 
 Contains the logic for generating SQL queries from natural language input using the Google Gemini model.
-
----
-
-## Environment Variables
-
-The project uses a `.env` file to manage API keys and other sensitive information.
-
-- **`GOOGLE_API_KEY`**: Required for accessing Google Gemini API. You can get this key from your Google Cloud Platform account.
 
 ---
 
