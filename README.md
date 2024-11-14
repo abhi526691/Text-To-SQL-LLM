@@ -1,6 +1,6 @@
 # Text-to-SQL Gemini Project
 
-This project is a Text-to-SQL application that leverages Google’s Gemini LLM to transform natural language input into SQL queries. The application reads a database schema, processes user inputs, and generates SQL queries to retrieve data based on those inputs. It is built with Python and Streamlit, making it suitable for both database management and natural language processing tasks.
+Text-to-SQL application that leverages Google’s Gemini LLM to transform natural language input into SQL queries. The application reads a database schema, processes user inputs, and generates SQL queries to retrieve data based on those inputs. It is built with Python and Streamlit, making it suitable for both database management and natural language processing tasks.
 
 
 
