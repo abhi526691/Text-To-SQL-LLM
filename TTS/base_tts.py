@@ -4,22 +4,29 @@ import re
 
 class View:
     def __init__(self):
-        pass
+        self.apply_dark_theme()
 
+    def apply_dark_theme(self):
+        # Apply custom CSS to create a full black theme
+        st.markdown("""
+            <style>
+            /* Text area specifically (for larger editor size) */
+            .stTextArea textarea {
+                height: 300px !important;  /* Larger editor size */
+                font-size: 16px !important; /* Larger font size */
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
+    # Existing methods in View class...
     def process_text(self, data):
         pattern = r"'(.*?)'"
         return [re.search(pattern, str(item)).group(1) for item in data if re.search(pattern, str(item))]
 
     def extract_sql_query(self, sql):
-        # Step 1: Remove block comments (/* ... */)
         sql = re.sub(r"/\*.*?\*/", "", sql, flags=re.DOTALL)
-
-        # Step 2: Remove single-line comments (-- ...)
         sql = re.sub(r"--.*", "", sql)
-
-        # Step 4: Remove excessive whitespace and newlines
         sql = re.sub(r"\s+", " ", sql).strip()
-
         sql = sql.replace("sql", "")
         sql = sql.replace("`", "")
         return sql
@@ -55,11 +62,9 @@ class View:
         return st.error(message)
 
     def table(self, data):
-        # Display the DataFrame as a table without row index
         return st.dataframe(data=data, hide_index=True)
 
     def select_box(self, data):
-        # Create a dropdown (selectbox) for selecting the table
         return st.selectbox("Select a table to display:", data)
 
     def expander(self, text):
